@@ -3,6 +3,7 @@ package com.tokenvalidator.app.model;
 public class Token {
     
     String value;
+    boolean test;
 
     public Token( String value) {
         this.value = value;
@@ -17,5 +18,9 @@ public class Token {
 
     public void setValue(String value) {
         this.value = value;
+    }
+    
+    public void setValue(boolean value) {
+        this.test = value;
     }
 }

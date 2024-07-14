@@ -41,7 +41,7 @@ public class TokenJWTController {
 		//System.out.println(token.getValue());
 		TokenJWT tokenjwt = validarJWTService.validateJwt(jwt);
 		
-		if(tokenjwt != null) {
+		if(tokenjwt.isTokenJWTValid()== true) {
 			
 			return ResponseEntity.ok("JWT Valido");
 		}else {

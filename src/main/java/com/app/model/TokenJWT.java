@@ -4,13 +4,19 @@ public class TokenJWT {
     
     String value, name, role;
     long seed;
-    
+    boolean isTokenJWTValid;
     
     public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public boolean isTokenJWTValid() {
+		return isTokenJWTValid;
+	}
+	public void setTokenJWTValid(boolean isTokenJWTValid) {
+		this.isTokenJWTValid = isTokenJWTValid;
 	}
 	public String getRole() {
 		return role;
@@ -33,6 +39,7 @@ public class TokenJWT {
     public TokenJWT() {
       
     }
+  
 
     public String getValue() {
         return this.value;

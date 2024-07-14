@@ -17,11 +17,12 @@ public class ValidarTokenJWTService {
 private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2JvcmFfbGE=";	
 
 	public TokenJWT validateJwt(String jwt) {
-
+		TokenJWT tokenJWT = new TokenJWT();
 	
 
 		try {
-			Jws<Claims> claimsJws = Jwts.parserBuilder()
+			Jws<Claims> claimsJws = 
+					Jwts.parserBuilder()
 					.setSigningKey(getSecretKey())
 					.build()
 					.parseClaimsJws(jwt);
@@ -32,7 +33,8 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (claims.size() != 3) {
 //            response.setValue(false);
 //            response.setValue("JWT must contain exactly 3 claims");
-				return null;
+				tokenJWT.setTokenJWTValid(false);
+				
 			}
 
 			// Verifica claim 'Name'
@@ -40,7 +42,7 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
 //            response.setValue(false);
 //            response.setValue("Invalid Name claim");
-				return null;
+				tokenJWT.setTokenJWTValid(false);
 			}
 
 			// Verifica claim 'Role'
@@ -49,7 +51,7 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (role == null || !validRoles.contains(role)) {
 //            response.setValue(false);
 //            response.setValue("Invalid Role claim");
-				return null;
+				tokenJWT.setTokenJWTValid(false);
 			}
 
 			// Verifica claim 'Role'
@@ -57,14 +59,15 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (seed == null || !isPrimo(seed)) {
 //            response.setValue(false);
 //            response.setValue("Invalid Seed claim (not a prime number)");
-				return null;
+				tokenJWT.setTokenJWTValid(false);
 			}
 
 			// Se todos os checks passar
-			TokenJWT tokenJWT = new TokenJWT();
+	
 			tokenJWT.setName(name);
 			tokenJWT.setRole(role);
 			tokenJWT.setSeed(seed);
+			tokenJWT.setTokenJWTValid(true);
 			
 			return tokenJWT;
 
@@ -74,6 +77,8 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 		} catch (Exception e) {
 //    	tokenJWT.setValue(false);
 //    	tokenJWT.setValue("JWT validation failed: " + e.getMessage());
+//			return null;
+			tokenJWT.setTokenJWTValid(false);
 			return null;
 		}
 

@@ -14,14 +14,17 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class ValidarTokenJWTService {
 
-private static final String SECRET_KEY = "test_lucas";	
+private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2JvcmFfbGE=";	
 
 	public TokenJWT validateJwt(String jwt) {
 
 	
 
 		try {
-			Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(getSecretKey()).build().parseClaimsJws(jwt);
+			Jws<Claims> claimsJws = Jwts.parserBuilder()
+					.setSigningKey(getSecretKey())
+					.build()
+					.parseClaimsJws(jwt);
 
 			Claims claims = claimsJws.getBody();
 

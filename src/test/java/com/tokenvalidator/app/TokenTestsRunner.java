@@ -1,5 +1,7 @@
 package com.tokenvalidator.app;
 
-public class TokenTests {
+public class TokenTestsRunner {
+	
+
 
 }

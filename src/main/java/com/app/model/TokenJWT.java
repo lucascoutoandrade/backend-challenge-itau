@@ -6,6 +6,13 @@ public class TokenJWT {
     long seed;
     boolean isTokenJWTValid;
     
+    public TokenJWT( String value) {
+        this.value = value;
+    }
+    public TokenJWT() {
+      
+    }
+    
     public String getName() {
 		return name;
 	}
@@ -31,16 +38,6 @@ public class TokenJWT {
 		this.seed = seed;
 	}
 
-	boolean test;
-
-    public TokenJWT( String value) {
-        this.value = value;
-    }
-    public TokenJWT() {
-      
-    }
-  
-
     public String getValue() {
         return this.value;
     }
@@ -49,7 +46,4 @@ public class TokenJWT {
         this.value = value;
     }
     
-    public void setValue(boolean value) {
-        this.test = value;
-    }
 }

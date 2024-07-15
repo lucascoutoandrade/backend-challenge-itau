@@ -1,7 +1,11 @@
 package com.app.service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Set;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.stereotype.Service;
 
 import com.app.model.TokenJWT;
@@ -9,6 +13,8 @@ import com.app.model.TokenJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoder;
 import io.jsonwebtoken.security.Keys;
 
 @Service
@@ -16,15 +22,20 @@ public class ValidarTokenJWTService {
 
 private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2JvcmFfbGE=";	
 
-	public TokenJWT validateJwt(String jwt) {
+//SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+SecretKey secret = Keys.hmacShaKeyFor("7f-j&CKk=coNzZc0y7_4obMP?#TfcYq%fcD0mDpenW2nc!lfGoZ|d?f&RNbDHUX6"
+		.getBytes(StandardCharsets.UTF_8));
+
+	public boolean validateJwt(String jwt) {
 		TokenJWT tokenJWT = new TokenJWT();
-	
+//		String [] tokenJwt = jwt.split(":");
 
 		try {
 			Jws<Claims> claimsJws = 
 					Jwts.parserBuilder()
-					.setSigningKey(getSecretKey())
+					.setSigningKey(secret)
 					.build()
+//					.parseClaimsJws(tokenJwt[1].replace("}","").replace("\"","").trim());
 					.parseClaimsJws(jwt);
 
 			Claims claims = claimsJws.getBody();
@@ -33,7 +44,8 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (claims.size() != 3) {
 //            response.setValue(false);
 //            response.setValue("JWT must contain exactly 3 claims");
-				tokenJWT.setTokenJWTValid(false);
+//				tokenJWT.setTokenJWTValid(false);
+				return false;
 				
 			}
 
@@ -42,7 +54,8 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
 //            response.setValue(false);
 //            response.setValue("Invalid Name claim");
-				tokenJWT.setTokenJWTValid(false);
+//				tokenJWT.setTokenJWTValid(false);
+				return false;
 			}
 
 			// Verifica claim 'Role'
@@ -51,7 +64,8 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (role == null || !validRoles.contains(role)) {
 //            response.setValue(false);
 //            response.setValue("Invalid Role claim");
-				tokenJWT.setTokenJWTValid(false);
+//				tokenJWT.setTokenJWTValid(false);
+				return false;
 			}
 
 			// Verifica claim 'Role'
@@ -59,7 +73,8 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			if (seed == null || !isPrimo(seed)) {
 //            response.setValue(false);
 //            response.setValue("Invalid Seed claim (not a prime number)");
-				tokenJWT.setTokenJWTValid(false);
+//				tokenJWT.setTokenJWTValid(false);
+				return false;
 			}
 
 			// Se todos os checks passar
@@ -69,7 +84,7 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 			tokenJWT.setSeed(seed);
 			tokenJWT.setTokenJWTValid(true);
 			
-			return tokenJWT;
+			return true;
 
 //        tokenJWT.setValue(true);
 //        tokenJWT.setValue("JWT is valid");
@@ -79,7 +94,7 @@ private static final String SECRET_KEY = "amF2YV90ZXN0X2x1Y2FzX3NwcmluZ19ib290X2
 //    	tokenJWT.setValue("JWT validation failed: " + e.getMessage());
 //			return null;
 			tokenJWT.setTokenJWTValid(false);
-			return null;
+			return false;
 		}
 
 		

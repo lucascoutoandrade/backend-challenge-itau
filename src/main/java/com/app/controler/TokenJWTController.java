@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody ;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.app.model.TokenJWT;
 import com.app.service.ValidarTokenJWTService;
 
 
@@ -39,9 +37,9 @@ public class TokenJWTController {
 
 		// Imprimindo o input recebido
 		//System.out.println(token.getValue());
-		TokenJWT tokenjwt = validarJWTService.validateJwt(jwt);
+		boolean tokenjwt = validarJWTService.validateJwt(jwt);
 		
-		if(tokenjwt.isTokenJWTValid()== true) {
+		if(tokenjwt == true) {
 			
 			return ResponseEntity.ok("JWT Valido");
 		}else {
@@ -52,10 +50,11 @@ public class TokenJWTController {
 	}
 	
 	@GetMapping("/validateJwt")
-	 public ResponseEntity<String> validateJwt(@RequestParam String jwt) {
-		TokenJWT jwtToken = validarJWTService.validateJwt(jwt);
+	 public ResponseEntity<String> validateJwt(@RequestParam("jwt") String jwt) {
+		
+		boolean jwtToken = validarJWTService.validateJwt(jwt);
 
-	        if (jwtToken != null) {
+	        if (jwtToken == true) {
 	            return ResponseEntity.ok("JWT válido");
 	        } else {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT inválido");

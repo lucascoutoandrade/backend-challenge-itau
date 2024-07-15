@@ -1,17 +1,12 @@
 package com.app.service;
 
-import java.security.Key;
 import java.util.Base64;
 import java.util.Set;
 import javax.crypto.SecretKey;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import com.app.model.TokenJWT;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -29,25 +24,14 @@ public class ValidarTokenJWTService {
 
 	public boolean validateJwt(String jwt) {
 
-		String[] tokenJwt = jwt.split(":");
+		String[] arrTokenJwt = jwt.split(":");
 //		String test = jwt.substring(7);
 //		String test = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiRXh0ZXJuYWwiLCJTZWVkIjoiODgwMzciLCJOYW1lIjoiTTRyaWEgT2xpdmlhIn0.6YD73XWZYQSSMDf6H0i3-kylz1-TY_Yt6h1cV2Ku-Qs";
-		String[] strClaims = decodePayload(tokenJwt[1].replace("}", "").replace("\"", "").trim());
+		String[] strClaims = decodePayload(arrTokenJwt[1].replace("}", "").replace("\"", "").trim());
 		try {
-//			Jws<Claims> claimsJws = 
-//					Jwts.parserBuilder()
-//					//.setSigningKey(SECRET_KEY.getBytes(Charset.forName("UTF-8")))
-//					.setSigningKey(secret)
-////					.setSigningKey(Base64.getEncoder().encode(SECRET_KEY.getBytes()))
-//					.build()
-////					.build()
-////					.parseClaimsJws(tokenJwt[1].replace("}","").replace("\"","").trim());
-//
-//					
-//					.parseClaimsJws(test);
 
-//			Claims claims = claimsJws.getBody();
 			if(strClaims == null) {
+				TokenJWT.setResponseMsg("JWT inválido");
 				return false;
 				
 			}
@@ -57,6 +41,7 @@ public class ValidarTokenJWTService {
 //            response.setValue(false);
 //            response.setValue("JWT must contain exactly 3 claims");
 //				tokenJWT.setTokenJWTValid(false);
+				TokenJWT.setResponseMsg("JWT não contem 3 claims");
 				return false;
 
 			}
@@ -67,6 +52,7 @@ public class ValidarTokenJWTService {
 //            response.setValue(false);
 //            response.setValue("Invalid Name claim");
 //				tokenJWT.setTokenJWTValid(false);
+				TokenJWT.setResponseMsg("Inválido claim Name");
 				return false;
 			}
 
@@ -77,6 +63,7 @@ public class ValidarTokenJWTService {
 //            response.setValue(false);
 //            response.setValue("Invalid Role claim");
 //				tokenJWT.setTokenJWTValid(false);
+				TokenJWT.setResponseMsg("Inválido claim Role");
 				return false;
 			}
 
@@ -86,6 +73,7 @@ public class ValidarTokenJWTService {
 //            response.setValue(false);
 //            response.setValue("Invalid Seed claim (not a prime number)");
 //				tokenJWT.setTokenJWTValid(false);
+				TokenJWT.setResponseMsg("Inválido claim Role (Não é um numero primo)");
 				return false;
 			}
 
@@ -94,6 +82,7 @@ public class ValidarTokenJWTService {
 			tokenJWT.setRole(role);
 			tokenJWT.setSeed(seed);
 			tokenJWT.setTokenJWTValid(true);
+			TokenJWT.setResponseMsg("JWT Válido");
 
 			return true;
 
@@ -101,9 +90,7 @@ public class ValidarTokenJWTService {
 //        tokenJWT.setValue("JWT is valid");
 
 		} catch (Exception e) {
-//    	tokenJWT.setValue(false);
-//    	tokenJWT.setValue("JWT validation failed: " + e.getMessage());
-//			return null;
+
 			System.out.println("JWT validation failed: " + e.getMessage());
 			tokenJWT.setTokenJWTValid(false);
 			return false;

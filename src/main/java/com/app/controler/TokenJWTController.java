@@ -5,9 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody ;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.app.model.TokenJWT;
 import com.app.service.ValidarTokenJWTService;
 
 
@@ -25,6 +26,7 @@ public class TokenJWTController {
 //		
 //	}
 	
+	
 	@Autowired
 	private ValidarTokenJWTService validarJWTService;
 	
@@ -38,14 +40,15 @@ public class TokenJWTController {
 
 		// Imprimindo o input recebido
 		//System.out.println(token.getValue());
+		TokenJWT tokenJwtModel = new TokenJWT();
 		boolean tokenjwt = validarJWTService.validateJwt(jwt);
 		
 		if(tokenjwt == true) {
 			
-			return ResponseEntity.ok("JWT Valido");
+			return ResponseEntity.ok(tokenJwtModel.getResponseMsg());
 		}else {
 			
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT inválido");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(tokenJwtModel.getResponseMsg());
 		}
 		
 	}

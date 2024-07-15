@@ -2,25 +2,15 @@ package com.app.service;
 
 import java.util.Base64;
 import java.util.Set;
-import javax.crypto.SecretKey;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import com.app.model.TokenJWT;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 
 @Service
 public class ValidarTokenJWTService {
 
-	TokenJWT tokenJWT = new TokenJWT();
-
-	private static final String SECRET_KEY = "ZGQlODgqMzQ3ZjZkJmbCoyQkwqMkRmRyZEZoMzNmc3NER14hMw==";
-
-	SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(SECRET_KEY));
-
-//SecretKey secret = Keys.hmacShaKeyFor("7f-j&CKk=coNzZc0y7_4obMP?#TfcYq%fcD0mDpenW2nc!lfGoZ|d?f&RNbDHUX6"
-//		.getBytes(StandardCharsets.UTF_8));
+	private TokenJWT tokenJWT = new TokenJWT();
 
 	public boolean validateJwt(String jwt) {
 
@@ -38,9 +28,7 @@ public class ValidarTokenJWTService {
 
 			// Deve conter apenas 3 claims
 			if (strClaims.length != 3) {
-//            response.setValue(false);
-//            response.setValue("JWT must contain exactly 3 claims");
-//				tokenJWT.setTokenJWTValid(false);
+
 				TokenJWT.setResponseMsg("JWT não contem 3 claims");
 				return false;
 
@@ -49,9 +37,7 @@ public class ValidarTokenJWTService {
 			// Verifica claim 'Name'
 			String name = tokenJWT.getName();
 			if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
-//            response.setValue(false);
-//            response.setValue("Invalid Name claim");
-//				tokenJWT.setTokenJWTValid(false);
+
 				TokenJWT.setResponseMsg("Inválido claim Name");
 				return false;
 			}
@@ -60,9 +46,7 @@ public class ValidarTokenJWTService {
 			String role = tokenJWT.getRole();
 			Set<String> validRoles = Set.of("Admin", "Member", "External");
 			if (role == null || !validRoles.contains(role)) {
-//            response.setValue(false);
-//            response.setValue("Invalid Role claim");
-//				tokenJWT.setTokenJWTValid(false);
+
 				TokenJWT.setResponseMsg("Inválido claim Role");
 				return false;
 			}
@@ -70,9 +54,7 @@ public class ValidarTokenJWTService {
 			// Verifica claim 'Role'
 			Integer seed = (int) tokenJWT.getSeed();
 			if (seed == null || !isPrimo(seed)) {
-//            response.setValue(false);
-//            response.setValue("Invalid Seed claim (not a prime number)");
-//				tokenJWT.setTokenJWTValid(false);
+
 				TokenJWT.setResponseMsg("Inválido claim Role (Não é um numero primo)");
 				return false;
 			}
@@ -86,13 +68,12 @@ public class ValidarTokenJWTService {
 
 			return true;
 
-//        tokenJWT.setValue(true);
-//        tokenJWT.setValue("JWT is valid");
 
 		} catch (Exception e) {
 
-			System.out.println("JWT validation failed: " + e.getMessage());
+			System.out.println("Validacao JWT Falhou: " + e.getMessage());
 			tokenJWT.setTokenJWTValid(false);
+			
 			return false;
 		}
 
@@ -147,11 +128,5 @@ public class ValidarTokenJWTService {
 		return true;
 	}
 
-	// Gera chave secreta
-//	private static Key getSecretKey() {
-//		
-//	
-//		return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-//	}
 
 }

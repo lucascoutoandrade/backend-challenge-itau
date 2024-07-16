@@ -1,47 +1,157 @@
 package com.tokenvalidator.app;
 
+import java.util.Properties;
+
+import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import com.dados.Dados;
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
+import utils.Config;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 public class TokenTestsRunner {
 	
+	private static Properties prop = Config.getProp();
+	private Dados dados = new Dados();
 	private JSONObject jsonObject = new JSONObject();
-	String token = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJTZWVkIjoiNzg0MSIsIk5hbWUiOiJUb25pbmhvIEFyYXVqbyJ9.QY05sIjtrcJnP533kQNk8QXcaleJ1Q01jWY_ZzIZuAg";
 	
 	@BeforeAll
 	public static void configInicial() {
 		
-		RestAssured.baseURI="http://localhost";
-//		RestAssured.basePath = "/validate";
-		RestAssured.port=8000;
+		RestAssured.baseURI=prop.getProperty("api.baseUri");
 		
 	}
 
 	@Test
-	public void deveVerificarAplicacaoEstaNoAr() throws JSONException {
+	@Order(1)
+	public void deveVerificarJwtValido() throws JSONException {
 		
-		jsonObject.put("value", token);
-
-		Response responseBody = RestAssured.given()
+		jsonObject.put("value", dados.getJwtValido());
+		
+		RestAssured.given()
 				.when().
 				body(jsonObject.toString())
 				.post("/validate")
 				.then()
-				.extract()
-				.response();
-		
-		Assertions.assertEquals(200, responseBody.getStatusCode());
-		Assertions.assertEquals("JWT Válido", responseBody.getBody().asPrettyString());
-
+				.statusCode(200)
+				.body("message", Matchers.containsString("JWT Válido"),
+					  "message", Matchers.instanceOf(String.class),
+					  "message", Matchers.not(Matchers.blankOrNullString())
+						)
 				
-	
-	
+				;
+
 	}
+	
+	@Test
+	@Order(2)
+	public void deveVerificarJwtInvalido() throws JSONException {
+		
+		jsonObject.put("value", dados.getJwtInvalido());
+		
+		RestAssured.given()
+				.when().
+				body(jsonObject.toString())
+				.post("/validate")
+				.then()
+				.statusCode(401)
+				.body("message", Matchers.containsString("JWT inválido"),
+					  "message", Matchers.instanceOf(String.class),
+					  "message", Matchers.not(Matchers.blankOrNullString())
+						);
+		
+		
+	}
+	
+	@Test
+	@Order(3)
+	public void deveVerificarJwtInvalidoClaimName() throws JSONException {
+		
+		
+		jsonObject.put("value", dados.getJwtInvalidoClaimName());
+		
+		RestAssured.given()
+				.when().
+				body(jsonObject.toString())
+				.post("/validate")
+				.then()
+				.statusCode(401)
+				.body("message", Matchers.containsString("Inválido claim Name"),
+					  "message", Matchers.instanceOf(String.class),
+					  "message", Matchers.not(Matchers.blankOrNullString())
+						);
+		
+		
+	}
+	
+	@Test
+	@Order(4)
+	public void deveVerificarJwtComMaisTrezClaims() throws JSONException {
+		
+		
+		jsonObject.put("value", dados.getJwtComMaisTresClaims());
+		
+		RestAssured.given()
+				.when().
+				body(jsonObject.toString())
+				.post("/validate")
+				.then()
+				.statusCode(401)
+				.body("message", Matchers.containsString("JWT não contem 3 claims"),
+					  "message", Matchers.instanceOf(String.class),
+					  "message", Matchers.not(Matchers.blankOrNullString())
+						);
+		
+		
+	}
+	@Test
+	@Order(5)
+	public void deveVerificarRecursoInexistente() throws JSONException {
+		
+		jsonObject.put("value", dados.getJwtValido());
+		RestAssured.given()
+		.when().
+		body(jsonObject.toString())
+		.post("/validates")
+		.then()
+		.statusCode(404)
+		.body("error", Matchers.containsString("Not Found"),
+			  "error", Matchers.instanceOf(String.class),
+			  "error", Matchers.not(Matchers.blankOrNullString())
+				);
+		
+		
+	}
+	@Test
+	@Order(6)
+	public void deveVerificarMetodoNaoAutorizado() throws JSONException {
+		
+		jsonObject.put("value", dados.getJwtValido());
+		RestAssured.given()
+		.when().
+		body(jsonObject.toString())
+		.get("/validate")
+		.then()
+		.statusCode(405)
+		.body("error", Matchers.containsString("Method Not Allowed"),
+			  "error", Matchers.instanceOf(String.class),
+			  "error", Matchers.not(Matchers.blankOrNullString())
+				);
+		
+		
+		
+		
+	}
+	
+	
+	
 
 
 }

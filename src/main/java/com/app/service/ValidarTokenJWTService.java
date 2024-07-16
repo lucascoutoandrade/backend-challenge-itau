@@ -15,9 +15,12 @@ public class ValidarTokenJWTService {
 	public boolean validateJwt(String jwt) {
 
 		String[] arrTokenJwt = jwt.split(":");
+		String tokenJwtRecebido = null;
+		
+		tokenJwtRecebido = (arrTokenJwt.length == 2)?arrTokenJwt[1].replace("}", "").replace("\"", "").trim():jwt;
 //		String test = jwt.substring(7);
 //		String test = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiRXh0ZXJuYWwiLCJTZWVkIjoiODgwMzciLCJOYW1lIjoiTTRyaWEgT2xpdmlhIn0.6YD73XWZYQSSMDf6H0i3-kylz1-TY_Yt6h1cV2Ku-Qs";
-		String[] strClaims = decodePayload(arrTokenJwt[1].replace("}", "").replace("\"", "").trim());
+		String[] strClaims = decodePayload(tokenJwtRecebido);
 		try {
 
 			if(strClaims == null) {
@@ -107,7 +110,7 @@ public class ValidarTokenJWTService {
 			claimsArray = new String[claimsObject.length()];
 		} catch (JSONException e) {
 
-			System.out.println("Não foi possivel converter a o token informado: " + e.getMessage());
+			System.out.println("{{JWT Invalida}} Não foi possivel converter string JSON em um objeto JSON: " + e.getMessage());
 
 		}
 

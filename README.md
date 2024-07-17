@@ -107,6 +107,7 @@ mvn test -Dtest="IntegracaoTest#deveVerificarJwtValido"
 
 ## Melhorias
 * Expor api em container ou cloud
-* Relatório de testes customizados (Allure Report)
 * Validar Header e Assinatura de um token JWT
 * Gerar token JWT
+* Relatório de testes customizados (Allure Report)
+* Criação da classe BaseTest

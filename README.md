@@ -31,6 +31,7 @@ Na src/test/java temos:
 Resources main e test, estão armazenados os arquivos de properties conforme abaixo:
 
 ![image](https://github.com/user-attachments/assets/7ce25114-c6de-4162-a05c-dfcf5eae8af2)
+
 Na resources/main o arquivo de properties da aplicação, apenas utilizamos a propriedade server.port para definir a porta que a api ira subir, no caso optamos pela 8000, porém, pode ser alterado para outras portas.
 
 ![image](https://github.com/user-attachments/assets/6e344ce4-c222-4adc-96ae-f1a187e68650)
@@ -43,10 +44,17 @@ O classe que valida as regras de negócio das claims, esta localizado no pacote 
 
 Foram criados os seguintes métodos na classe ValidarTokenJWTService:
 
+* decodePayload(String jwt):Recebe como parametro uma string jwt verifica se o jwt possui mais de 02 partes, decodifica a base64 transformando em bites, depois converte os bytes em string e converte a string em json, por fim retorna um array de string baseado no tamanho do objetojson.
+  
 * verificaClaimRole(String claimRole): Recebe como parametro uma string claimRole e retorna boleano de acordo com a regra de negócio claim Role deve conter apenas 1 dos três valores (Admin, Member e External)
+  
 * verificaClaimSeed(int claimSeed): Recebe como parametro um int claimSeed e retorna boleano de acordo com a regra de negócio claim Seed deve ser um número primo.
+  
 * verificaClaimName(String claimName): Recebe como parametro uma string claimName e retorna boleano de acordo com a regra de negócio claim Name não pode ter carácter de números e O tamanho máximo da claim Name é de 256 caracteres.
+  
 * isPrimo(long n): Recebe como parametro um long numero e retorna boleano de acordo com a regra numero não pode ser < 1 e numero não pode ter como resultado o resto da divisão do numero ser igual a zero(0).
+
+Tambem validamos no método validateJwt se o token é valido ou não e se o array strClaims obtido do método decodePayload é diferente ou igual a 3.
 
 ##  Requisitos
 * Java 11+ JDK deve estar instalado

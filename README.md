@@ -1,4 +1,4 @@
-# Teste Técnico challenge backend Itaú
+# Teste Técnico Backend Itaú
 
 Foi construido uma aplicação que expõe uma api web que recebe por parametros um JWT (string) e verifica se é valida conforme regras abaixo:
 
@@ -25,8 +25,8 @@ Na src/test/java temos:
 ![image](https://github.com/user-attachments/assets/31266269-8df1-4258-ab6c-d0199f2ac696)
 
 * com.app.dados= Contem a classe Dados que utilizamos para capturar os dados de teste.
-* com.app.testes.integracao= Comtem a classe IntegracaoTest que foram criados todoss os testes de integração automatizados
-* com.app.testes.unitarios= Contem a classe ValidarTokenJWTServiceTest que foram criados todoss os testes unitários automatizados
+* com.app.testes.integracao= Contem a classe IntegracaoTest que foram criados todos os testes de integração automatizados
+* com.app.testes.unitarios= Contem a classe ValidarTokenJWTServiceTest que foram criados todos os testes unitários automatizados
 
 Resources main e test, estão armazenados os arquivos de properties conforme abaixo:
 
@@ -55,6 +55,21 @@ Foram criados os seguintes métodos na classe ValidarTokenJWTService:
 * isPrimo(long n): Recebe como parametro um long numero e retorna boleano de acordo com a regra numero não pode ser < 1 e numero não pode ter como resultado o resto da divisão do numero ser igual a zero(0).
 
 Tambem validamos no método validateJwt se o token é valido ou não e se o array strClaims obtido do método decodePayload é diferente ou igual a 3.
+
+# Detalhando a classe TokenJWTController
+A Classe TokenJWTController é responsável por receber as requisições, interpretar os parametros, interagir com o modelo e preparar a resposta da api.
+
+![image](https://github.com/user-attachments/assets/b1fe14f7-fdd0-4b22-9891-97dc529b83a5)
+
+O método validate recebe o parametro string JWT, no seu corpo, temos a chamada do método validarJWTService da classe ValidarTokenJWTService que realizada a validação do JWT retornando o valor boleano, se true método valida retorna json com campo message e valor JWT Válido, caso falso, retorna json com campo message e valor de acordo com o teste realizado.
+
+# Detalhando a classe TokenJWT
+A classe TokenJWT desempenha um papel central na aplicação, definindo a estrutura dos dados, implementando a lógica de negócios e interagindo com o armazenamento persistente dos dados do JWT.
+
+![image](https://github.com/user-attachments/assets/768d9110-339c-41f2-a255-c13c19eabbe2)
+
+
+
 
 ##  Requisitos
 * Java 11+ JDK deve estar instalado

@@ -44,8 +44,10 @@ public class ValidarTokenJWTService {
 				TokenJWT.setResponseMsg("Inválido claim Name");
 				return false;
 			}
+//			verificaClaimName(tokenJWT.getName());
 
 			// Verifica claim 'Role'
+//			verificaClaimRole(tokenJWT.getRole());
 			String role = tokenJWT.getRole();
 			Set<String> validRoles = Set.of("Admin", "Member", "External");
 			if (role == null || !validRoles.contains(role)) {
@@ -54,18 +56,18 @@ public class ValidarTokenJWTService {
 				return false;
 			}
 
-			// Verifica claim 'Role'
+			// Verifica claim 'Seed'
 			Integer seed = (int) tokenJWT.getSeed();
 			if (seed == null || !isPrimo(seed)) {
 
-				TokenJWT.setResponseMsg("Inválido claim Role (Não é um numero primo)");
+				TokenJWT.setResponseMsg("Inválido claim Seed (Não é um numero primo)");
 				return false;
 			}
 
 			// Se todos os checks passar
-			tokenJWT.setName(name);
-			tokenJWT.setRole(role);
-			tokenJWT.setSeed(seed);
+//			tokenJWT.setName(name);
+//			tokenJWT.setRole(role);
+//			tokenJWT.setSeed(seed);
 			tokenJWT.setTokenJWTValid(true);
 			TokenJWT.setResponseMsg("JWT Válido");
 
@@ -119,7 +121,7 @@ public class ValidarTokenJWTService {
 	}
 
 	// Valida se numero e primo
-	private static boolean isPrimo(long n) {
+	 public static boolean isPrimo(long n) {
 		if (n <= 1) {
 			return false;
 		}
@@ -130,6 +132,32 @@ public class ValidarTokenJWTService {
 		}
 		return true;
 	}
+	 
+	 public boolean verificaClaimName(String claimName) {
+		 
+			// Verifica claim 'Name'
+			String name = claimName;
+			if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
 
+				TokenJWT.setResponseMsg("Inválido claim Name");
+				
+				return false;
+			}
+			
+			 return true;
+		}
+	 
+	 public boolean verificaClaimRole(String claimRole) {
+	 
+		String role = claimRole;
+		Set<String> validRoles = Set.of("Admin", "Member", "External");
+		if (role == null || !validRoles.contains(role)) {
 
+			TokenJWT.setResponseMsg("Inválido claim Role");
+			return false;
+		}
+		
+		return true;
+
+	 }
 }

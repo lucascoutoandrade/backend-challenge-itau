@@ -1,7 +1,6 @@
-package com.tokenvalidator.app;
+package com.app.testes.integracao;
 
 import java.util.Properties;
-
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,13 +9,15 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import com.dados.Dados;
+
+import com.app.dados.Dados;
+
 import io.restassured.RestAssured;
 import utils.Config;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
-public class TokenTestsRunner {
+public class IntegracaoTest {
 	
 	private static Properties prop = Config.getProp();
 	private Dados dados = new Dados();

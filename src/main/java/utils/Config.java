@@ -11,7 +11,8 @@ public class Config {
 		Properties props = new Properties();
 		FileInputStream file = null;
 		try {
-			file = new FileInputStream("./configs/app.properties");
+			file = new FileInputStream("./src/test/resources/application.test.properties");
+			//file = new FileInputStream("./configs/application.test.properties");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.dados;
+package com.app.dados;
 
 import java.util.Properties;
 

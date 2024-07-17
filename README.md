@@ -69,8 +69,6 @@ A classe TokenJWT desempenha um papel central na aplicação, definindo a estrut
 ![image](https://github.com/user-attachments/assets/768d9110-339c-41f2-a255-c13c19eabbe2)
 
 
-
-
 ##  Requisitos
 * Java 11+ JDK deve estar instalado
 * Maven deve estar instalado e configurado no path da aplicação
@@ -82,6 +80,17 @@ A classe TokenJWT desempenha um papel central na aplicação, definindo a estrut
 É Possivel executar pela propria IDE, selecionado qual Teste deseja executar e simplismente dar play no método <br>
 do teste ou podera executar pela linha de comando atraves do comando:<br>
 
+## Testes unitários
+Os testes unitários foram construidos visando validar as unidades(métodos e entradas) da classe ValidarTokenJWTServiceTest realizando testes positivos e negativos.
+
+![image](https://github.com/user-attachments/assets/777396b3-e5ec-4619-b416-34c85c2285e5)
+
+## Testes de integração
+Os testes de integração foram construidos visando validar a integração de todas as partes da api construida realizando testes positivos, negativos, de status code, validando valor das mensagens do body response e tipo primitivo retornado.
+
+![image](https://github.com/user-attachments/assets/1b16d737-0bff-4664-8345-1aef27986543)
+
+## Execução dos testes
 Rodar todos os testes<br>
 ```bash
 mvn test 

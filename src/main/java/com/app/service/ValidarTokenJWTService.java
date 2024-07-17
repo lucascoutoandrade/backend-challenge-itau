@@ -16,17 +16,16 @@ public class ValidarTokenJWTService {
 
 		String[] arrTokenJwt = jwt.split(":");
 		String tokenJwtRecebido = null;
-		
-		tokenJwtRecebido = (arrTokenJwt.length == 2)?arrTokenJwt[1].replace("}", "").replace("\"", "").trim():jwt;
-//		String test = jwt.substring(7);
-//		String test = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiRXh0ZXJuYWwiLCJTZWVkIjoiODgwMzciLCJOYW1lIjoiTTRyaWEgT2xpdmlhIn0.6YD73XWZYQSSMDf6H0i3-kylz1-TY_Yt6h1cV2Ku-Qs";
+
+		tokenJwtRecebido = (arrTokenJwt.length == 2) ? arrTokenJwt[1].replace("}", "").replace("\"", "").trim() : jwt;
 		String[] strClaims = decodePayload(tokenJwtRecebido);
 		try {
 
-			if(strClaims == null) {
+			// Deve conter claim valida
+			if (strClaims == null) {
 				TokenJWT.setResponseMsg("JWT inválido");
 				return false;
-				
+
 			}
 
 			// Deve conter apenas 3 claims
@@ -37,48 +36,34 @@ public class ValidarTokenJWTService {
 
 			}
 
-			// Verifica claim 'Name'
-			String name = tokenJWT.getName();
-			if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
+			// Verifica claim 'Name
+			if (!verificaClaimName(tokenJWT.getName())) {
 
-				TokenJWT.setResponseMsg("Inválido claim Name");
 				return false;
 			}
-//			verificaClaimName(tokenJWT.getName());
 
 			// Verifica claim 'Role'
-//			verificaClaimRole(tokenJWT.getRole());
-			String role = tokenJWT.getRole();
-			Set<String> validRoles = Set.of("Admin", "Member", "External");
-			if (role == null || !validRoles.contains(role)) {
-
-				TokenJWT.setResponseMsg("Inválido claim Role");
+			if (!verificaClaimRole(tokenJWT.getRole())) {
 				return false;
 			}
 
 			// Verifica claim 'Seed'
-			Integer seed = (int) tokenJWT.getSeed();
-			if (seed == null || !isPrimo(seed)) {
-
-				TokenJWT.setResponseMsg("Inválido claim Seed (Não é um numero primo)");
+			if(!verificaClaimSeed((int)tokenJWT.getSeed())) {
 				return false;
+				
 			}
 
 			// Se todos os checks passar
-//			tokenJWT.setName(name);
-//			tokenJWT.setRole(role);
-//			tokenJWT.setSeed(seed);
 			tokenJWT.setTokenJWTValid(true);
 			TokenJWT.setResponseMsg("JWT Válido");
 
 			return true;
 
-
 		} catch (Exception e) {
 
 			System.out.println("Validacao JWT Falhou: " + e.getMessage());
 			tokenJWT.setTokenJWTValid(false);
-			
+
 			return false;
 		}
 
@@ -100,7 +85,7 @@ public class ValidarTokenJWTService {
 
 		// Converter os bytes decodificados em uma string JSON
 		String decodedClaims = new String(decodedBytes);
-		
+
 		try {
 			// Converter a string JSON em um objeto JSON
 			JSONObject claimsObject = new JSONObject(decodedClaims);
@@ -112,7 +97,8 @@ public class ValidarTokenJWTService {
 			claimsArray = new String[claimsObject.length()];
 		} catch (JSONException e) {
 
-			System.out.println("{{JWT Invalida}} Não foi possivel converter string JSON em um objeto JSON: " + e.getMessage());
+			System.out.println(
+					"{{JWT Invalida}} Não foi possivel converter string JSON em um objeto JSON: " + e.getMessage());
 
 		}
 
@@ -120,8 +106,48 @@ public class ValidarTokenJWTService {
 
 	}
 
+	public boolean verificaClaimRole(String claimRole) {
+
+		String role = claimRole;
+		Set<String> validRoles = Set.of("Admin", "Member", "External");
+		if (role == null || !validRoles.contains(role)) {
+
+			TokenJWT.setResponseMsg("Inválido claim Role");
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public boolean verificaClaimSeed(int claimSeed) {
+
+		Integer seed = claimSeed;
+		if (seed == null || !isPrimo(seed)) {
+
+			TokenJWT.setResponseMsg("Inválido claim Seed (Não é um numero primo)");
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean verificaClaimName(String claimName) {
+
+		// Verifica claim 'Name'
+		String name = claimName;
+		if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
+
+			TokenJWT.setResponseMsg("Inválido claim Name");
+
+			return false;
+		}
+
+		return true;
+	}
+
 	// Valida se numero e primo
-	 public static boolean isPrimo(long n) {
+	public static boolean isPrimo(long n) {
 		if (n <= 1) {
 			return false;
 		}
@@ -132,32 +158,5 @@ public class ValidarTokenJWTService {
 		}
 		return true;
 	}
-	 
-	 public boolean verificaClaimName(String claimName) {
-		 
-			// Verifica claim 'Name'
-			String name = claimName;
-			if (name == null || name.length() > 256 || name.matches(".*\\d.*")) {
 
-				TokenJWT.setResponseMsg("Inválido claim Name");
-				
-				return false;
-			}
-			
-			 return true;
-		}
-	 
-	 public boolean verificaClaimRole(String claimRole) {
-	 
-		String role = claimRole;
-		Set<String> validRoles = Set.of("Admin", "Member", "External");
-		if (role == null || !validRoles.contains(role)) {
-
-			TokenJWT.setResponseMsg("Inválido claim Role");
-			return false;
-		}
-		
-		return true;
-
-	 }
 }

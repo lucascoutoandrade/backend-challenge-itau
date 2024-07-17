@@ -112,4 +112,4 @@ mvn test -Dtest="IntegracaoTest#deveVerificarJwtValido"
 * Validar Header e Assinatura de um token JWT
 * Gerar token JWT
 * Relatório de testes customizados (Allure Report)
-* Criação da classe BaseTest e da classe RunnerTest
+* Criação da classe RunnerTest

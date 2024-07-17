@@ -74,7 +74,9 @@ A classe TokenJWT desempenha um papel central na aplicação, definindo a estrut
 * Maven deve estar instalado e configurado no path da aplicação
 
 ## Como iniciar a api
-É possivel iniciar a aplicação pela propria IDE, executando na classe TokenJWTApplication Run As >> Java Application 
+É possivel iniciar a aplicação pela propria IDE, executando na classe TokenJWTApplication Run As >> Java Application
+
+![image](https://github.com/user-attachments/assets/caa43946-dc7b-4368-bfac-c4f542cfd962)
 
 ## Como executar os testes
 É Possivel executar pela propria IDE, selecionado qual Teste deseja executar e simplismente dar play no método <br>

@@ -33,3 +33,9 @@ mvn test -Dtest="IntegracaoTest#deveVerificarJwtValido"
 * Api que valida Claims
 * Testes de Integração (Positivos e negativos)
 * Testes unitários (Positivos e negativos)
+
+## Melhorias
+* Expor api em container ou cloud
+* Relatório de testes customizados (Allure Report)
+* Validar Header e Assinatura de um token JWT
+* Gerar token JWT
